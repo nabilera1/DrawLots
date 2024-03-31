@@ -2,6 +2,11 @@ import tkinter as tk
 from tkinter import ttk, messagebox, filedialog, simpledialog
 import random
 import csv
+import datetime
+import locale
+
+locale.setlocale(locale.LC_TIME, '')  # 시스템의 기본 로케일 사용
+
 
 
 # 발표 순서를 랜덤하게 생성하고 결과를 표시하는 함수
@@ -26,32 +31,73 @@ def generate_order():
         tree.insert("", "end", values=(i, number))
 
 
-# 발표 순서를 CSV 파일로 저장하는 함수
+# # 발표 순서를 CSV 파일로 저장하는 함수
+# def save_to_csv():
+#     if random_order:
+#         filename = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV 파일", "*.csv")])
+#         if filename:
+#             with open(filename, mode="w", newline="", encoding="utf-8") as file:
+#                 writer = csv.writer(file)
+#                 writer.writerow(["발표 순서", "학생 번호"])
+#                 for i, number in enumerate(random_order, start=1):
+#                     writer.writerow([i, number])
+#             messagebox.showinfo("저장 성공", f"'{filename}'로 저장되었습니다.")
+#     else:
+#         messagebox.showwarning("경고", "먼저 발표 순서를 생성해주세요.")
+#
+#
+# # 발표 순서를 TXT 파일로 저장하는 함수
+# def save_to_txt():
+#     if random_order:
+#         filename = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("텍스트 파일", "*.txt")])
+#         if filename:
+#             with open(filename, mode="w", encoding="utf-8") as file:
+#                 for i, number in enumerate(random_order, start=1):
+#                     file.write(f"발표 순서 {i}: 학생 번호 {number}\n")
+#             messagebox.showinfo("저장 성공", f"'{filename}'로 저장되었습니다.")
+#     else:
+#         messagebox.showwarning("경고", "먼저 발표 순서를 생성해주세요.")
+
+
+
 def save_to_csv():
-    if random_order:
-        filename = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV 파일", "*.csv")])
-        if filename:
-            with open(filename, mode="w", newline="", encoding="utf-8") as file:
-                writer = csv.writer(file)
-                writer.writerow(["발표 순서", "학생 번호"])
-                for i, number in enumerate(random_order, start=1):
-                    writer.writerow([i, number])
-            messagebox.showinfo("저장 성공", f"'{filename}'로 저장되었습니다.")
-    else:
+    if not random_order:
         messagebox.showwarning("경고", "먼저 발표 순서를 생성해주세요.")
+        return
+
+    filename = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV 파일", "*.csv")])
+    if filename:
+        subject = subject_entry.get()
+        now = datetime.datetime.now()
+        date_time = now.strftime("%A, %Y-%m-%d %H:%M:%S")  # '요일, 년-월-일 시:분:초' 형식
+
+        with open(filename, mode="w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow([subject, date_time])
+            writer.writerow(["발표 순서", "학생 번호"])
+            for i, number in enumerate(random_order, start=1):
+                writer.writerow([i, number])
+        messagebox.showinfo("저장 성공", f"'{filename}'로 저장되었습니다.")
 
 
-# 발표 순서를 TXT 파일로 저장하는 함수
 def save_to_txt():
-    if random_order:
-        filename = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("텍스트 파일", "*.txt")])
-        if filename:
-            with open(filename, mode="w", encoding="utf-8") as file:
-                for i, number in enumerate(random_order, start=1):
-                    file.write(f"발표 순서 {i}: 학생 번호 {number}\n")
-            messagebox.showinfo("저장 성공", f"'{filename}'로 저장되었습니다.")
-    else:
+    if not random_order:
         messagebox.showwarning("경고", "먼저 발표 순서를 생성해주세요.")
+        return
+
+    filename = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("텍스트 파일", "*.txt")])
+    if filename:
+        subject = subject_entry.get()
+        now = datetime.datetime.now()
+        date_time = now.strftime("%A, %Y-%m-%d %H:%M:%S")  # '요일, 년-월-일 시:분:초' 형식
+
+        with open(filename, mode="w", encoding="utf-8") as file:
+            file.write(f"{subject}, {date_time}\n")
+            for i, number in enumerate(random_order, start=1):
+                file.write(f"발표 순서 {i}: 학생 번호 {number}\n")
+        messagebox.showinfo("저장 성공", f"'{filename}'로 저장되었습니다.")
+
+
 # 간단한 인쇄 메시지를 표시하는 함수
 def print_order():
     if random_order:
