@@ -1,6 +1,6 @@
 # DrawLots 프로젝트
-
-DrawLots는 학급에서 발표 순서를 랜덤하게 결정해주는 파이썬 GUI 프로그램입니다.
+- 수업용 예제 프로그램
+- DrawLots는 학급에서 발표 순서를 랜덤하게 결정해주는 파이썬 GUI 프로그램입니다.
 
 소스코드명 : drawlots_main.py
 
